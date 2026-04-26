@@ -57,13 +57,12 @@ DEFAULT_CLAUDE_MODEL = get_secret("CLAUDE_MODEL") or "claude-sonnet-4-5"
 USE_CLAUDE = bool(ANTHROPIC_API_KEY and not ANTHROPIC_API_KEY.startswith("your_"))
 
 # 入力エリア（サンプル質問選択時にpre-fill）
-default_question = ""
 if "sample_question" in st.session_state:
-    default_question = st.session_state.pop("sample_question")
+    st.session_state["question_input"] = st.session_state.pop("sample_question")
 
 question = st.text_area(
     "質問を入力してください",
-    value=default_question,
+    key="question_input",
     placeholder="例: ヒット商品を作るためのターゲティングのコツは？",
     height=100,
 )
@@ -114,7 +113,7 @@ with st.expander("💡 サンプル質問を見る"):
     for s in samples:
         if st.button(s, key=s, use_container_width=True):
             st.session_state["sample_question"] = s
-            st.rerun()
+            st.rerun()  # session_stateをquestion_inputに転写してリロード
 
 # 送信ボタン
 run = st.button("🔍 検索して回答する", type="primary", use_container_width=True, disabled=not question.strip())
