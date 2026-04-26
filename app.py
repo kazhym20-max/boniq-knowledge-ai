@@ -53,10 +53,8 @@ st.divider()
 
 # LLMラベル確認
 ANTHROPIC_API_KEY = get_secret("ANTHROPIC_API_KEY")
-CLAUDE_MODEL = get_secret("CLAUDE_MODEL") or "claude-sonnet-4-5"
+DEFAULT_CLAUDE_MODEL = get_secret("CLAUDE_MODEL") or "claude-sonnet-4-5"
 USE_CLAUDE = bool(ANTHROPIC_API_KEY and not ANTHROPIC_API_KEY.startswith("your_"))
-llm_label = f"Claude ({CLAUDE_MODEL})" if USE_CLAUDE else "GPT-4o-mini"
-st.caption(f"使用モデル: {llm_label}")
 
 # 入力エリア
 question = st.text_area(
@@ -65,7 +63,7 @@ question = st.text_area(
     height=100,
 )
 
-col1, col2 = st.columns([2, 1])
+col1, col2, col3 = st.columns([2, 1, 1])
 with col1:
     source_option = st.selectbox(
         "検索対象",
@@ -73,6 +71,20 @@ with col1:
     )
 with col2:
     top_k = st.slider("参照チャンク数", min_value=3, max_value=12, value=8)
+with col3:
+    if USE_CLAUDE:
+        model_options = {
+            "Sonnet（速い）": "claude-sonnet-4-5",
+            "Opus（高精度）": "claude-opus-4-5",
+        }
+        model_label = st.selectbox("モデル", options=list(model_options.keys()))
+        CLAUDE_MODEL = model_options[model_label]
+    else:
+        CLAUDE_MODEL = DEFAULT_CLAUDE_MODEL
+        st.caption("モデル: GPT-4o-mini")
+
+llm_label = f"Claude ({CLAUDE_MODEL})" if USE_CLAUDE else "GPT-4o-mini"
+st.caption(f"使用モデル: {llm_label}")
 
 source_map = {
     "全ナレッジ（立川＋Jay）": None,
