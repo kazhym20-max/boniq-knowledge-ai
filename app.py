@@ -47,7 +47,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ヘッダー
-st.title("🍖 BONIQナレッジAI v2")
+st.title("🍖 BONIQナレッジAI")
 st.caption("立川光昭・ジェイ・エイブラハム 175本分の講義に質問できます")
 st.divider()
 
