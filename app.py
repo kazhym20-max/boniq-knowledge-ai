@@ -80,7 +80,8 @@ with col3:
     if USE_CLAUDE:
         model_options = {
             "Sonnet（速い）": "claude-sonnet-4-5",
-            "Opus（高精度）": "claude-opus-4-5",
+            "Opus 4.5（高精度）": "claude-opus-4-5",
+            "Opus 4.7（最新）": "claude-opus-4-7",
         }
         model_label = st.selectbox("モデル", options=list(model_options.keys()))
         CLAUDE_MODEL = model_options[model_label]
